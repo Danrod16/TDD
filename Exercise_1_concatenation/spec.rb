@@ -30,8 +30,21 @@ class Person
   end
 
   def full_name_with_middle_initial
+
     initial = middle_name.split('').first
     f_name = [first_name, initial, last_name]
+    f_name.compact.join(' ')
+  end
+
+  def initials
+    first_name_i = first_name.split('').first
+    last_name_i = last_name.split('').first
+    if middle_name == nil
+      f_name = [first_name_i, last_name_i]
+    else
+      middle_name_i = middle_name.split('').first
+      f_name = [first_name_i, middle_name_i, last_name_i]
+    end
     f_name.compact.join(' ')
   end
 end
@@ -47,7 +60,7 @@ RSpec.describe Person do
     it 'does not add extra spaces if middle name is missing' do
       person = Person.new(first_name: 'Daniel', last_name: 'Romero')
 
-    expect(person.full_name).to eq('Daniel Romero')
+      expect(person.full_name).to eq('Daniel Romero')
     end
   end
 
@@ -56,9 +69,20 @@ RSpec.describe Person do
       person = Person.new(first_name: 'Daniel', middle_name: 'Rodriguez', last_name: 'Romero')
       expect(person.full_name_with_middle_initial).to eq('Daniel R Romero')
     end
+    it 'does not add extra spaces if middle name is missing' do
+      person = Person.new(first_name: 'Daniel', last_name: 'Romero')
 
-
-
-  describe "#initials"
+      expect(person.full_name).to eq('Daniel Romero')
+    end
+  end
+  describe "#initials" do
+    it 'Add a method to return all initials' do
+      person = Person.new(first_name: 'Daniel', middle_name: 'Rodriguez', last_name: 'Romero')
+      expect(person.initials).to eq('D R R')
+    end
+    it 'Missing middle_name return two letters' do
+      person = Person.new(first_name: 'Daniel', last_name: 'Romero')
+      expect(person.initials).to eq('D R')
+    end
   end
 end
